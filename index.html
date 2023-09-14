@@ -10,24 +10,52 @@
     <header class="search">
       <a class="menu">menu</a>
       <form id="form" type="submit">
-        <input id="input" class="searchinput" />
-        <button class="searchbutton" type="submit">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="1em"
-            viewBox="0 0 512 512"
-            class="searchicon"
-          >
-            <path
-              d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-            />
-          </svg>
-        </button>
+        <input id="input" type="search" class="searchinput" />
+        <button class="searchbutton" type="submit"></button>
       </form>
+      <a class="menu">Login</a>
     </header>
+    <nav class="nav">
+      <div>
+        <a href="home.html">Home</a>
+        <a href="movies.html">Movies</a>
+        <a href="tv.html">TV</a>
+        <a href="actors.html">Actors</a>
+        <a href="about.html">About</a>
+      </div>
+    </nav>
+    <h1>Most Popular Movies</h1>
     <div id="image"></div>
+    <div id="searchPoster"></div>
     <script>
       const APIKEY = "7356f6c781f842026367b8baa225abdb";
+      function setupMenu() {
+        var hoverNav = false;
+        var hoverBtn = false;
+        document
+          .querySelector(".menu")
+          .addEventListener("mouseover", (event) => {
+            hoverBtn = true;
+            hoverNav = true;
+            document.querySelector(".nav").style.display = "block";
+          });
+        document
+          .querySelector(".menu")
+          .addEventListener("mouseleave", (event) => {
+            hoverBtn = false;
+            if (!hoverBtn && !hoverNav) {
+              document.querySelector(".nav").style.display = "none";
+            }
+          });
+        document
+          .querySelector(".nav")
+          .addEventListener("mouseleave", (event) => {
+            hoverNav = false;
+            if (!hoverBtn && !hoverNav) {
+              document.querySelector(".nav").style.display = "none";
+            }
+          });
+      }
       function setupSearch() {
         document.querySelector("#form").addEventListener("submit", (event) => {
           event.preventDefault();
@@ -38,8 +66,8 @@
             success: (result) => {
               var posterpath = result.results[0].poster_path;
               document.querySelector(
-                "#image"
-              ).innerHTML = `<img src="https://image.tmdb.org/t/p/w500/${posterpath}">`;
+                "#searchPoster"
+              ).innerHTML = `<img class="poster" src="https://image.tmdb.org/t/p/w500/${posterpath}">`;
             },
             error: (error) => {
               console.log(error);
@@ -47,31 +75,136 @@
           });
         });
       }
+
+      function loadPopular() {
+        var element = document.querySelector("#image");
+        var accessToken =
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MzU2ZjZjNzgxZjg0MjAyNjM2N2I4YmFhMjI1YWJkYiIsInN1YiI6IjY1MDFjOTdkNTU0NWNhMDBhYjVkYmRkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.zvglGM1QgLDK33Dt6PpMK9jeAOrLNnxClZ6mkLeMgBE";
+        $.ajax({
+          url: `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`,
+          type: "GET",
+          beforeSend: (req) => {
+            req.setRequestHeader("Authorization", accessToken);
+          },
+          success: (result) => {
+            console.log(result);
+            for (let i = 0; i < 6; i++) {
+              var posterpath = result.results[i].poster_path;
+              console.log(posterpath);
+              element.innerHTML += `<img class="poster" src="https://image.tmdb.org/t/p/w500/${posterpath}">`;
+            }
+          },
+        });
+      }
       setupSearch();
+      setupMenu();
+      loadPopular();
     </script>
   </body>
 </html>
 <style>
-  .searchicon {
-    display: flex;
-    position: absolute;
-    top: 3px;
-    right: 17px;
-    height: 3vh;
-  }
-
   .searchbutton {
     background: none;
     border: none;
+    position: relative;
   }
 
   .searchinput {
-    width: 100vh;
-    height: 3vh;
+    width: 140vh;
   }
 
   .search {
     display: flex;
+  }
+
+  #image {
+    display: flex;
+  }
+  body {
+    display: block;
+  }
+
+  form {
+    color: #555;
+    display: flex;
+    border: 1px solid currentColor;
+    border-radius: 5px;
+  }
+  input[type="search"] {
+    border: none;
+    background: transparent;
+    margin: 0;
+    padding: 7px 8px;
+    font-size: 14px;
+    color: inherit;
+  }
+  button[type="submit"] {
+    text-indent: -999px;
+    overflow: hidden;
+    width: 40px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid transparent;
+    border-radius: inherit;
+    background: transparent
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E")
+      no-repeat center;
+    cursor: pointer;
+    opacity: 0.7;
+  }
+  button[type="submit"]:hover {
+    opacity: 1;
+  }
+
+  form.nosubmit {
+    border: none;
+    padding: 0;
+  }
+
+  .nav {
+    display: none;
+    border: 1px solid black;
+    height: fit-content;
+    width: 29vh;
     position: absolute;
+    background-color: grey;
+  }
+
+  .nav a {
+    display: flex;
+    flex-direction: row;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    justify-content: center;
+    border: 1px solid black;
+    font-weight: bold;
+  }
+
+  .menu {
+    text-transform: capitalize;
+    text-decoration: underline;
+    font-size: large;
+    padding-top: 0.5vh;
+    padding-right: 12.5vh;
+    padding-left: 12.5vh;
+  }
+
+  .poster {
+    width: 150px;
+    height: 225px;
+    padding: 1vh;
+    margin-left: 5vh;
+  }
+
+  #image {
+    margin-left: 30vh;
+    margin-right: 30vh;
+    background-color: #555;
+  }
+
+  h1 {
+    margin-left: 30vh;
+    margin-top: 10vh;
+    margin-right: 30vh;
   }
 </style>
