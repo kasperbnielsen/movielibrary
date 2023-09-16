@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="title"></div>
+    <div id="backdrop"></div>
+    <div id="overview"></div>
+    <script>
+      var overview = sessionStorage.getItem("overview");
+      var title = sessionStorage.getItem("title");
+      var backdrop = sessionStorage.getItem("backdrop");
+
+      document.querySelector("#title").innerHTML = "<h1>" + title + "</h1>";
+      document.querySelector("#overview").innerHTML = overview;
+      document.querySelector(
+        "#backdrop"
+      ).innerHTML = `<img src="https://image.tmdb.org/t/p/w500${backdrop}">`;
+    </script>
+  </body>
+</html>

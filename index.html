@@ -90,9 +90,19 @@
             console.log(result);
             for (let i = 0; i < 6; i++) {
               var posterpath = result.results[i].poster_path;
-              console.log(posterpath);
-              element.innerHTML += `<img class="poster" src="https://image.tmdb.org/t/p/w500/${posterpath}">`;
+              element.innerHTML += `<img class="poster redposter" src="https://image.tmdb.org/t/p/w500/${posterpath}">`;
             }
+            var posters = document.querySelectorAll(".redposter");
+
+            posters.forEach((element, i) => {
+              element.addEventListener("click", (event) => {
+                var data = result.results[i];
+                sessionStorage.setItem("backdrop", data.backdrop_path);
+                sessionStorage.setItem("title", data.title);
+                sessionStorage.setItem("overview", data.overview);
+                window.location.href = `movie.html`;
+              });
+            });
           },
         });
       }
