@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="genreslist.js"></script>
   </head>
   <body>
     <div id="title"></div>
@@ -19,6 +20,9 @@
       var title = sessionStorage.getItem("title");
       var posterpath = sessionStorage.getItem("posterpath");
       var id = sessionStorage.getItem("id");
+      var genres;
+      console.log(sessionStorage.getItem("genres"));
+
       var genres = sessionStorage.getItem("genres");
 
       document.querySelector("#title").innerHTML = "<h1>" + title + "</h1>";

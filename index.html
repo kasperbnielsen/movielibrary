@@ -154,7 +154,11 @@
               sessionStorage.setItem("title", data.title);
               sessionStorage.setItem("overview", data.overview);
               sessionStorage.setItem("id", data.id);
-              sessionStorage.setItem("genres", data.genre_ids);
+              var genredata = "";
+              data.genres.forEach((element) => {
+                genredata += element.id + ",";
+              });
+              sessionStorage.setItem("genres", genredata);
               window.location.href = `movie.html?id=${data.id}`;
             });
             actors.setAttribute("id", "undertitle");
